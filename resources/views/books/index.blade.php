@@ -1,5 +1,8 @@
 @extends('layout')
 
+@section('title')
+<title>Home page</title>
+@endsection
 @section('content')
 <h1>All books</h1>
 @foreach ($books as $book)

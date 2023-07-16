@@ -17,11 +17,24 @@ class newBookController extends Controller
        return view('books.create');
     }
     public function store (Request $request){
+       //validation
+        $request->validate([
+            'title'=>'required | string | max:100',
+            'description'=>'required | string ',
+            'image'=>'nullable |image '
+        ]);
+
        $title=$request->title;
        $desc=$request->description;
+
+       $image=$request->file('image');
+       $extension=$image->getClientOriginalExtension();
+        $image_name="book-".uniqid().".$extension";
+        $image->move(public_path('uploads/books'),$image_name);
        book::Create([
         'title'=>$title,
-        'description'=>$desc
+        'description'=>$desc,
+        'image'=>$image_name
        ]) ;
        return redirect(route('books.index'));
     }
@@ -30,14 +43,36 @@ class newBookController extends Controller
        return view('books.edit',compact('book'));
      }
      public function update(Request $request , $id){
-        book::findOrFail($id)->update([
+         //validation
+         $request->validate([
+            'title'=>'required | string | max:100',
+            'description'=>'required | string ',
+            'image'=>'nullable'
+        ]);
+
+        $book=book::findOrFail($id);
+        if($request->hasFile('image')){
+            if($book->image!==null){
+                unlink(public_path('uploads/books/') .$book->image );
+            }
+            $image=$request->file('image');
+            $extension=$image->getClientOriginalExtension();
+            $image_name="book-".uniqid().".$extension";
+            $image->move(public_path('uploads/books'),$image_name);
+        }
+        $book->update([
             'title'=>$request->title,
-            'description'=>$request->description
+            'description'=>$request->description,
+            'image'=>$image_name
         ]);
         return redirect(route('books.edit',$id));
      }
      public function delete($id){
-        book::findOrFail($id)->delete();
-        return redirect(route('books.index'));
+       $book = book::findOrFail($id);
+       if($book->image !== null){
+       unlink(public_path('uploads/books/') . $book->image);
+       }
+       $book->delete();
+       return redirect(route('books.index'));
      }
 }
