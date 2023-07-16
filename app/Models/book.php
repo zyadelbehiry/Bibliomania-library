@@ -11,4 +11,7 @@ class book extends Model
     protected $fillable=[
         'title','description','image'
     ];
+    public function categories(){
+        return $this->belongsToMany('App\Models\category');
+    }
 }
