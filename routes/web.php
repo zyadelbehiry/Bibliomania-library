@@ -41,3 +41,7 @@ Route::get('/categories/edit/{id}','App\Http\Controllers\categoryController@edit
 Route::post('/categories/update/{id}','App\Http\Controllers\categoryController@update')->name('categories.update');
 //delete
 Route::get('/categories/delete/{id}','App\Http\Controllers\categoryController@delete')->name('categories.delete');
+// Authentication
+Route::get('/register','App\Http\Controllers\AuthController@register')->name('auth.register');
+Route::post('/register','App\Http\Controllers\AuthController@handleRegister')->name('auth.handleRegister');
+
