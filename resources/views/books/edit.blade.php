@@ -9,19 +9,19 @@
     <form method="POST" action="{{ route('books.update',$book->id) }}" enctype="multipart/form-data">
         @csrf
         <div class="my-4 mb-3">
-            <label class="form-label">Book title</label>
-            <input type="text" class="form-control" name="title" value="{{ $book->title }}">
+            <label class="form-label bg-dark rounded-pill text-light p-2">Book title</label>
+            <input type="text" class="form-control border-dark " name="title" value="{{ $book->title }}">
         </div>
         <div class="my-4 mb-3">
-            <label class="form-label">Book description</label>
-            <textarea class="form-control" rows="3" name="description" >{{ $book->description }}</textarea>
+            <label class="form-label bg-dark rounded-pill text-light p-2">Book description</label>
+            <textarea class="form-control border-dark" rows="3" name="description" >{{ $book->description }}</textarea>
         </div>
         <div>
-            <label class="form-label">Image</label>
-            <input class="form-control form-control" type="file" name="image">
+            <label class="form-label bg-dark rounded-pill text-light p-2">Image</label>
+            <input class="form-control form-control border-dark" type="file" name="image" value="{{ $book->image }}">
           </div>
         <div class="my-4 ">
-            <input type="submit" class="btn btn-primary px-4" value="Update">
+            <input type="submit" class="btn btn-dark px-4" value="Update">
         </div>
     </form>
 @endsection

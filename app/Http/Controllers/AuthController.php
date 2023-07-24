@@ -27,4 +27,26 @@ class AuthController extends Controller
         Auth::login($user);
         return redirect(route('books.index'));
     }
+    public function login(){
+        return view('Authentications.login');
+    }
+    public function handleLogin(Request $request){
+        $request->validate([
+        'email'=>'required | email | max:100',
+        'password'=>'required | string | max:50 | min:5'
+        ]);
+
+       $is_login = Auth::attempt([
+        'email'=>$request->email,'password'=>$request->password
+    ]);
+       if(! $is_login){
+        return back();
+       }
+       else
+       return redirect(route('books.index'));
+    }
+    public function logout(){
+        Auth::logout();
+        return view('Authentications.login');
+    }
 }

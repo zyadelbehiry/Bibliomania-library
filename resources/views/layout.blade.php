@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -11,9 +11,9 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand-lg bg-dark nav-underline ">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Codezilla</a>
+            <a class="navbar-brand link-light" href="#">Codezilla</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -22,13 +22,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('books.index') }}">Home</a>
+                        <a class="nav-link active link-light " aria-current="page" href="{{ route('books.index') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="{{ route('books.create') }}">Create</a>
+                        <a class="nav-link link-light" href="{{ route('books.create') }}">Create</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle link-light" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             Dropdown
                         </a>
@@ -44,21 +44,43 @@
 
                 </ul>
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <input class="form-control me-2 bg-light outlin-light" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav ml-auto px-2">
+                    @guest
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('auth.register') }}">
+                        <a class="nav-link link-light"  href="{{ route('auth.register') }}">
                             Register
                         </a>
+                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link link-light" href="{{ route('auth.login') }}">
+                                Login
+                            </a>
+                        </li>
+                    @endguest
+
+                    @auth
+                    <li class="nav-item">
+                        <a class="nav-link disabled link-light" href="#">
+                            {{ Auth::user()->name }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light" href="{{ route('auth.logout') }}">
+                            Logout
+                        </a>
+                    </li>
+                    @endauth
                 </ul>
+
             </div>
         </div>
     </nav>
 
 
-    <div class="container">
+    <div class ="mx-4">
         @yield('content')
     </div>
     <script src="{{ asset('js/bootstrap.js') }}"></script>

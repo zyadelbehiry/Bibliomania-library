@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\category;
 use Illuminate\Http\Request;
 use App\Models\book;
 class newBookController extends Controller
@@ -14,28 +15,33 @@ class newBookController extends Controller
        return view('books.show',compact('book'));
     }
     public function create (){
-       return view('books.create');
+        $categories=category::select('id','categoryName')->get();
+       return view('books.create',compact('categories'));
     }
     public function store (Request $request){
        //validation
         $request->validate([
             'title'=>'required | string | max:100',
             'description'=>'required | string ',
-            'image'=>'nullable |image '
+            'image'=>'nullable |image ',
+            'category_ids'=>'required',
+            'category_ids.*'=>'exists:categories,id',
+
         ]);
 
        $title=$request->title;
        $desc=$request->description;
 
-       $image=$request->file('image');
-       $extension=$image->getClientOriginalExtension();
+        $image=$request->file('image');
+        $extension=$image->getClientOriginalExtension();
         $image_name="book-".uniqid().".$extension";
         $image->move(public_path('uploads/books'),$image_name);
-       book::Create([
+       $book=book::Create([
         'title'=>$title,
         'description'=>$desc,
         'image'=>$image_name
-       ]) ;
+       ]);
+        $book->categories()->sync($request->category_ids);
        return redirect(route('books.index'));
     }
     public function edit($id){
@@ -49,8 +55,8 @@ class newBookController extends Controller
             'description'=>'required | string ',
             'image'=>'nullable'
         ]);
-
         $book=book::findOrFail($id);
+        $image_name=$book->image;
         if($request->hasFile('image')){
             if($book->image!==null){
                 unlink(public_path('uploads/books/') .$book->image );
@@ -65,7 +71,7 @@ class newBookController extends Controller
             'description'=>$request->description,
             'image'=>$image_name
         ]);
-        return redirect(route('books.edit',$id));
+        return redirect(route('books.index',$id));
      }
      public function delete($id){
        $book = book::findOrFail($id);
